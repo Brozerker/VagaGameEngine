@@ -1,9 +1,20 @@
 #pragma once
 #include "entity.h"
 #include "rect.h"
-#include"vector_.h"
+#include "vector_.h"
+#include "vec2i.h"
+#include "animatingicon.h"
+
+// this should be
+static AnimatingIcon::Frame playerIconFrames[] = {
+	AnimatingIcon::Frame(Icon(2, 8, 0), 150),
+	AnimatingIcon::Frame(Icon(2, 7, 0), 50),
+	AnimatingIcon::Frame(Icon(2, 15, 0), 100),
+	AnimatingIcon::Frame(Icon(2, 7, 0), 50),
+};
 
 class Gameplay {
+
 	Entity player;
 	Rect world;
 	long keyToHit;

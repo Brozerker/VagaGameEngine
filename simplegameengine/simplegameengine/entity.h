@@ -1,5 +1,7 @@
 #pragma once
 #include "vec2i.h"
+#include "printable.h"
+#include "animatingicon.h"
 
 class Entity {
 	bool iconAnimates;

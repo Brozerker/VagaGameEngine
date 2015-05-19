@@ -82,11 +82,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animatingicon.h" />
+    <ClInclude Include="array_.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="gameplay.h" />
     <ClInclude Include="icon.h" />
     <ClInclude Include="platform_conio.h" />
     <ClInclude Include="platform_random.h" />
     <ClInclude Include="printable.h" />
     <ClInclude Include="rect.h" />
+    <ClInclude Include="vec2i.h" />
+    <ClInclude Include="vector_.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
