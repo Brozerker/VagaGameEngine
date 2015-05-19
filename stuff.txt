@@ -1,0 +1,37 @@
+Vagaroguelike
+
+100 menu
+	main menu
+		start game
+		quit
+	pause menu
+		resume
+		quit
+	inventory menu
+1000 2D
+	998 wasd movement
+	999 console graphics (colored)
+800 combat
+	880 run into monster
+	879 compare attack scores to defense scores
+	878 do typing game to add bonus to attack score
+		complexity of typing game is determined by score difference
+850 ai monsters
+	849 random movement
+	750 follow the player
+	300 boss monsters
+825 inventory
+	824 list items
+	820 items can be selected
+	819 selected items can be equipped/unequipped/used
+823 items with abilities
+	780 weapons
+	armor
+	potions/scrolls
+	wands/staves
+	822 keys
+		that open doors
+	other items
+	items show up on the ground
+	items can be picked up
+	items can be equipped

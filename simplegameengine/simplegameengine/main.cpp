@@ -1,6 +1,7 @@
 #include "platform_conio.h"
 #include <stdlib.h>
 
+<<<<<<< HEAD
 
 #include "printable.h"
 #include "rect.h"
@@ -225,6 +226,18 @@ public:
 
 // TODO http://patorjk.com/software/taag/#p=display&f=Univers&t=AaBbCcDdEeFfGgHhIiJj%0AKkLlMmNnOoPpQqRrSsTt%0AUuVvWwXxYyZz%5B%5D%7B%7D%5C%7C%2F-%2B%3D%0A012345678!%40%23%24%25%5E%26*()_
 
+=======
+#include "array_.h"
+#include "vector_.h"
+#include "vec2i.h"
+#include "entity.h"
+#include "rect.h"
+
+#include "printable.h"
+#include "icon.h"
+#include "animatingicon.h"
+#include "gameplay.h"
+>>>>>>> origin/master
 
 #include <ctime>
 #include "platform_random.h"
