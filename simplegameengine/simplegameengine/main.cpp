@@ -1,6 +1,13 @@
 #include "platform_conio.h"
 #include <stdlib.h>
 
+
+#include "printable.h"
+#include "rect.h"
+#include "icon.h"
+#include "animatingicon.h"
+
+
 // when making your own data structures:
 // 1) make it without templates or const correctness, just to make it.
 // 2) once it works just like you want, then add const templates/correctness
@@ -107,50 +114,6 @@ public:
 //	user input
 //	update
 
-class Printable {
-public:
-	virtual void Print() = 0;
-	virtual ~Printable(){}
-};
-
-// classes hide complexity with encapsulation
-class Icon : public Printable {
-private:
-	char icon, fcolor, bcolor;
-public:
-	Icon(char c, int foreColor, int backColor) : icon(c), fcolor(foreColor), bcolor(backColor) {}
-	void Print() { platform_setColor(fcolor, bcolor); putchar(icon); }
-	Icon & operator=(char c){ icon = c; return *this; }
-	Icon(char c) : fcolor(7), bcolor(0) { operator=(c); }
-};
-
-class AnimatingIcon : public Printable {
-public:
-	struct Frame {
-		Icon icon;
-		int time;
-		Frame(Icon icon, int time) : icon(icon), time(time){}
-	};
-private:
-	Frame * frames;
-	int count;
-	int index, timer;
-public:
-	AnimatingIcon() : frames(nullptr), count(0), index(0), timer(0) {}
-	AnimatingIcon(Frame * frames, const int count) : frames(frames), count(count), index(0), timer(0) {}
-	void SetFrames(Frame * frames, const int count) { this->frames = frames; this->count = count; }
-	void Print() { frames[index].icon.Print(); }
-	void Update(int ms) {
-		timer += ms;
-		if (timer >= frames[index].time) {
-			timer -= frames[index].time;
-			index++;
-			if (index >= count){
-				index = 0;
-			}
-		}
-	}
-};
 
 // public by default. don't support polymorphism! structs should be simple: should not require encapsulation.
 struct Vec2i {
@@ -175,20 +138,7 @@ public:
 		}
 	}
 };
-class Rect {
-public:
-	Icon icon;
-	Vec2i position, size;
-	Rect(Icon icon, Vec2i position, Vec2i size) : icon(icon), position(position), size(size) {}
-	void Draw(){
-		for (int row = 0; row < size.y; ++row){
-			for (int col = 0; col < size.x; ++col){
-				platform_move(row, col);
-				icon.Print();
-			}
-		}
-	}
-};
+
 
 static AnimatingIcon::Frame playerIconFrames[] = {
 	AnimatingIcon::Frame(Icon(2, 8, 0), 150),

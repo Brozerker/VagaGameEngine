@@ -81,8 +81,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animatingicon.h" />
+    <ClInclude Include="icon.h" />
     <ClInclude Include="platform_conio.h" />
     <ClInclude Include="platform_random.h" />
+    <ClInclude Include="printable.h" />
+    <ClInclude Include="rect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
