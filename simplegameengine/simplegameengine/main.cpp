@@ -1,7 +1,19 @@
 #include "platform_conio.h"
 #include <stdlib.h>
+<<<<<<< HEAD
 #include "vector_.h"
 #include "gameplay.h"
+=======
+
+<<<<<<< HEAD
+
+#include "printable.h"
+#include "rect.h"
+#include "icon.h"
+#include "animatingicon.h"
+
+
+>>>>>>> origin/master
 // when making your own data structures:
 // 1) make it without templates or const correctness, just to make it.
 // 2) once it works just like you want, then add const templates/correctness
@@ -24,52 +36,9 @@ typedef Array_<int> Arrayi; // compiler level - typesafe (will generate more err
 //	user input
 //	update
 
-class Printable {
-public:
-	virtual void Print() = 0;
-	virtual ~Printable(){}
-};
-
-// classes hide complexity with encapsulation
-class Icon : public Printable {
-private:
-	char icon, fcolor, bcolor;
-public:
-	Icon(char c, int foreColor, int backColor) : icon(c), fcolor(foreColor), bcolor(backColor) {}
-	void Print() { platform_setColor(fcolor, bcolor); putchar(icon); }
-	Icon & operator=(char c){ icon = c; return *this; }
-	Icon(char c) : fcolor(7), bcolor(0) { operator=(c); }
-};
-
-class AnimatingIcon : public Printable {
-public:
-	struct Frame {
-		Icon icon;
-		int time;
-		Frame(Icon icon, int time) : icon(icon), time(time){}
-	};
-private:
-	Frame * frames;
-	int count;
-	int index, timer;
-public:
-	AnimatingIcon() : frames(nullptr), count(0), index(0), timer(0) {}
-	AnimatingIcon(Frame * frames, const int count) : frames(frames), count(count), index(0), timer(0) {}
-	void SetFrames(Frame * frames, const int count) { this->frames = frames; this->count = count; }
-	void Print() { frames[index].icon.Print(); }
-	void Update(int ms) {
-		timer += ms;
-		if (timer >= frames[index].time) {
-			timer -= frames[index].time;
-			index++;
-			if (index >= count){
-				index = 0;
-			}
-		}
-	}
-};
 
 // public by default. don't support polymorphism! structs should be simple: should not require encapsulation.
+<<<<<<< HEAD
 
 class Rect {
 public:
@@ -85,6 +54,31 @@ public:
 		}
 	}
 };
+=======
+struct Vec2i {
+	int x, y;
+	Vec2i() : x(0), y(0) {}
+	Vec2i(int x, int y) :x(x), y(y) {}
+};
+class Entity {
+	bool iconAnimates;
+public:
+	Printable * icon;
+	Vec2i position;
+	Entity(Printable * icon, Vec2i position) : icon(icon), position(position) {
+		iconAnimates = dynamic_cast<AnimatingIcon*>(icon) != nullptr;
+	}
+	void Draw() {
+		platform_move(position.y, position.x); icon->Print();
+	}
+	void Update(int ms){
+		if (iconAnimates) {
+			((AnimatingIcon*)icon)->Update(ms);
+		}
+	}
+};
+
+>>>>>>> origin/master
 
 static AnimatingIcon::Frame playerIconFrames[] = {
 	AnimatingIcon::Frame(Icon(2, 8, 0), 150),
@@ -96,6 +90,18 @@ static AnimatingIcon::Frame playerIconFrames[] = {
 
 // TODO http://patorjk.com/software/taag/#p=display&f=Univers&t=AaBbCcDdEeFfGgHhIiJj%0AKkLlMmNnOoPpQqRrSsTt%0AUuVvWwXxYyZz%5B%5D%7B%7D%5C%7C%2F-%2B%3D%0A012345678!%40%23%24%25%5E%26*()_
 
+=======
+#include "array_.h"
+#include "vector_.h"
+#include "vec2i.h"
+#include "entity.h"
+#include "rect.h"
+
+#include "printable.h"
+#include "icon.h"
+#include "animatingicon.h"
+#include "gameplay.h"
+>>>>>>> origin/master
 
 #include <ctime>
 #include "platform_random.h"

@@ -26,5 +26,17 @@
     <ClInclude Include="platform_random.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="printable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animatingicon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
