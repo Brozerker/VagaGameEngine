@@ -53,5 +53,8 @@
     <ClInclude Include="vector_.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="timerqueue.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

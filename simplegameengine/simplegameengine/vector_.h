@@ -24,6 +24,14 @@ public:
 		}
 		data[count++] = value;
 	}
+
+	void RemoveAt(int index){
+		for (int i = index; i < Count() - 1; ++i) {
+			data[i] = data[i + 1];
+		}
+		count--;
+	}
+
 	void Clear() { count = 0; }
 	// TODO Insert(index, value), RemoveAt(index), Remove(const T & value)
 

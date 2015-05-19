@@ -90,6 +90,7 @@
     <ClInclude Include="platform_random.h" />
     <ClInclude Include="printable.h" />
     <ClInclude Include="rect.h" />
+    <ClInclude Include="timerqueue.h" />
     <ClInclude Include="vec2i.h" />
     <ClInclude Include="vector_.h" />
   </ItemGroup>
