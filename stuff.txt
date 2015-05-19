@@ -11,6 +11,9 @@ Vagaroguelike
 1000 2D
 	998 wasd movement
 	999 console graphics (colored)
+
+997 Timed event system
+
 800 combat
 	880 run into monster
 	879 compare attack scores to defense scores

@@ -26,7 +26,7 @@ class Gameplay {
 public:
 	Gameplay() :
 		player(new AnimatingIcon(playerIconFrames, sizeof(playerIconFrames) / sizeof(playerIconFrames[0])), Vec2i(4, 0)),
-		world(Icon('.', 7, 15), Vec2i(), Vec2i(10, 1)),
+		world(Icon('.', 7, 15), Vec2i(), Vec2i(20, 15)),
 		gameRunning(true), userInput(-1), cheatMode(false)
 	{
 		keyToHit = (rand() % 26) + 'a';
@@ -42,6 +42,7 @@ public:
 	void Draw() {
 		world.Draw();
 		player.Draw();
+		platform_move(world.size.y + 1, 0);
 		platform_setColor(7, 0);  printf("\npress ");
 		platform_setColor(13, 0); printf("%c", keyToHit);
 		animation.Print();
@@ -50,25 +51,31 @@ public:
 	void Update(clock_t deltaTimeMS) {
 		animation.Update(deltaTimeMS);
 		player.Update(deltaTimeMS);
-		// update based on time, user input, game state (variables of the game)
-		if (userInput == keyToHit){
-			player.position.x++;
-			int next;
-			// make it so the same key won't show up twice.
-			do{ next = (rand() % 26) + 'a'; } while (next == keyToHit);
-			keyToHit = next;
-			if (cheatMode) keyToHit = 'q';
-		} else {
-			if (userInput >= 'a' && userInput <= 'z')
-				player.position.x--;
+		switch (userInput){
+		case 'w':	player.position.y--;	break;
+		case 'a':	player.position.x--;	break;
+		case 's':	player.position.y++;	break;
+		case 'd':	player.position.x++;	break;
 		}
-		if (player.position.x >= world.size.x) {
-			gameRunning = false;
-			platform_setColor(10, 0); printf("WINNAR!\n");
-		} else if (player.position.x < 0) {
-			gameRunning = false;
-			platform_setColor(12, 0); printf("You Lose.\n");
-		}
+		//// update based on time, user input, game state (variables of the game)
+		//if (userInput == keyToHit){
+		//	player.position.x++;
+		//	int next;
+		//	// make it so the same key won't show up twice.
+		//	do{ next = (rand() % 26) + 'a'; } while (next == keyToHit);
+		//	keyToHit = next;
+		//	if (cheatMode) keyToHit = 'q';
+		//} else {
+		//	if (userInput >= 'a' && userInput <= 'z')
+		//		player.position.x--;
+		//}
+		//if (player.position.x >= world.size.x) {
+		//	gameRunning = false;
+		//	platform_setColor(10, 0); printf("WINNAR!\n");
+		//} else if (player.position.x < 0) {
+		//	gameRunning = false;
+		//	platform_setColor(12, 0); printf("You Lose.\n");
+		//}
 		if (userInput == '\r' || userInput == '\n') {
 			int testSequence[] = { PLATFORM_KEY_UP, PLATFORM_KEY_DOWN, PLATFORM_KEY_LEFT, PLATFORM_KEY_RIGHT, ' ' };
 			if (keypresses.IsEqual(testSequence, sizeof(testSequence) / sizeof(testSequence[0]))) {
