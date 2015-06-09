@@ -1,4 +1,4 @@
-Vagaroguelike
+burrito
 
 100 menu
 	main menu

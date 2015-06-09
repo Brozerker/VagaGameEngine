@@ -21,7 +21,7 @@ void printInt(int num) {
 		putchar(((num&(1 << i)) != 0) ? '1' : '0');
 	}
 }
-
+#include "map2d.h"
 #include "timerqueue.h"
 int main() {
 	// toying with functional programming
@@ -47,9 +47,9 @@ int main() {
 	platform_getch();
 	*/
 	srand((unsigned int)time(NULL));
-	Gameplay g;
+	Gameplay g(10);
 	clock_t now, previous = clock(), deltaTime, soon;
-	int FPS = 30;
+	int FPS = 20;
 	TimerQueue tq;
 	int index = 0;
 	// capture list, the argument list in the square braces
@@ -79,8 +79,36 @@ int main() {
 	printf("1 + 2 = %d\n", f(1,2));
 	f = subtract;
 	printf("1 - 2 = %d\n", f(1, 2));
-	platform_getch();
 
+	Map2D map;
+	const char * myMap =
+		"#######"
+		"# 0 0 #"
+		"#\\___/#"
+		"#######";
+	map.SetData(myMap, 4, 7);
+	map.Draw();
+
+	platform_getch();
+	Map2D screen;
+	const char * screenBufferInitialization =
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................"
+		"............................................................";
+	screen.SetData(screenBufferInitialization, 16, 60);
 	while (g.IsGameRunning()) { // game loop
 		// timing code
 		now = clock();
@@ -88,7 +116,8 @@ int main() {
 		previous = now;
 
 		// game loop code
-		g.Draw();
+		g.Draw(&screen);                     // fill the off-screen buffer
+		platform_move(0, 0); screen.Draw();  // present the off-screen buffer, also called "flip"
 		if (platform_kbhit()) {
 			g.UserInput(platform_getch());
 		}
