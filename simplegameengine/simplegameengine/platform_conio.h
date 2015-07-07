@@ -19,11 +19,11 @@ void platform_sleep(long ms);
 /** how many milliseconds since first use of this API */
 long long platform_upTimeMS();
 /** set the memory at the given rows/columns variable to the size (in rows and columns) of the console */
-void platform_consoleSize(long & out_rows, long & out_columns);
+inline void platform_consoleSize(long & out_rows, long & out_columns);
 /** wait for any key to be pressed (thread blocking call) */
 inline void platform_waitForAnyKey() { while (!platform_kbhit()) { platform_sleep(1); } }
 /** usable as replacement for _getch() in conio.h */
-long platform_getch() { platform_waitForAnyKey(); return platform_getchar(); }
+inline long platform_getch() { platform_waitForAnyKey(); return platform_getchar(); }
 
 /*
 // example console application using this library:

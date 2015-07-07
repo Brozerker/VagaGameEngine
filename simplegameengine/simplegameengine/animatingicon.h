@@ -2,6 +2,7 @@
 
 #include "printable.h"
 #include "map2d.h"
+#include "pixel.h"
 
 class AnimatingIcon : public Printable {
 public:

@@ -27,7 +27,7 @@ class Gameplay {
 	AnimatingIcon animation;
 public:
 	Gameplay(int playerCount) :
-		world(Pixel('.', 7, 15), Vec2i(), Vec2i(20, 15)),
+		world(Vec2i(), Vec2i(20, 15)),
 		gameRunning(true), userInput(-1), cheatMode(false)
 	{
 		for (int i = 0; i < playerCount; ++i) {
@@ -43,9 +43,12 @@ public:
 	}
 	bool IsGameRunning() { return gameRunning; }
 	void Draw(Map2D * graphicsContext) {
-		world.Draw(graphicsContext);
+		world.Draw(graphicsContext, Pixel('.'));
 		for (int i = 0; i < players.Count(); ++i) {
-			players[i].Draw(graphicsContext);
+			//if (world.Contains(players[i].position)) {
+			if (graphicsContext->GetRect().Contains(players[i].position)) {
+				players[i].Draw(graphicsContext);
+			}
 		}
 		animation.Print();
 	}
@@ -58,10 +61,10 @@ public:
 		}
 		Entity * currentP = &players[0];
 		switch (userInput){
-		case 'w':	currentP->position.y--;	break;
-		case 'a':	currentP->position.x--;	break;
-		case 's':	currentP->position.y++;	break;
-		case 'd':	currentP->position.x++;	break;
+		case 'w':	case PLATFORM_KEY_UP: currentP->position.y--;	break;
+		case 'a':	case PLATFORM_KEY_LEFT: currentP->position.x--;	break;
+		case 's':	case PLATFORM_KEY_DOWN: currentP->position.y++;	break;
+		case 'd':	case PLATFORM_KEY_RIGHT: currentP->position.x++;	break;
 		}
 		if (userInput == '\r' || userInput == '\n') {
 			int testSequence[] = { PLATFORM_KEY_UP, PLATFORM_KEY_DOWN, PLATFORM_KEY_LEFT, PLATFORM_KEY_RIGHT, ' ' };

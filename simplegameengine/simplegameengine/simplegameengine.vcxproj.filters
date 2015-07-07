@@ -18,6 +18,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform_conio.h">
@@ -25,18 +28,6 @@
     </ClInclude>
     <ClInclude Include="platform_random.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="printable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="icon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="animatingicon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rect.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="array_.h">
       <Filter>Source Files</Filter>
@@ -57,6 +48,21 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="map2d.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animatingicon.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="icon.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="printable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pixel.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

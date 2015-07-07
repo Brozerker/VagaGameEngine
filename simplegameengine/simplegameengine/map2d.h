@@ -1,32 +1,23 @@
 #pragma once
 #include "array_.h"
 #include "platform_conio.h"
-
-struct Pixel
-{
-	static const int FORE = 7, BACK = 0;
-	char c;
-	char fcolor;
-	char bcolor;
-	char __buffer;
-	Pixel() : c('?'), fcolor(FORE), bcolor(BACK) {}
-	Pixel(char c) : c(c), fcolor(FORE), bcolor(BACK) {}
-	Pixel(char c, int f, int b) : c(c), fcolor(f), bcolor(b) {}
-	void Print() {
-		platform_setColor(fcolor, bcolor); putchar(c);
-	}
-};
+#include "rect.h"
+#include "pixel.h"
 
 class Map2D {
 protected:
 	int width, height;
 	Array_<Pixel> data;
 public:
+	// return true if the point is withing the rectangular boundary of this map
 	Map2D() : width(0), height(0) {}
 	void SetSize(int width, int height){
 		this->width = width;
 		this->height = height;
 		data.SetAllocatedSize(width * height);
+	}
+	Rect GetRect() {
+		return Rect(Vec2i(0, 0), Vec2i(width, height));
 	}
 	Pixel Get(int row, int col) {
 		if (row < 0 || row >= height || col < 0 || col >= width) {

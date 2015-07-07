@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="rect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animatingicon.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="gameplay.h" />
     <ClInclude Include="icon.h" />
     <ClInclude Include="map2d.h" />
+    <ClInclude Include="pixel.h" />
     <ClInclude Include="platform_conio.h" />
     <ClInclude Include="platform_random.h" />
     <ClInclude Include="printable.h" />
