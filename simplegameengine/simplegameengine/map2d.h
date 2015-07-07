@@ -27,9 +27,18 @@ public:
 	}
 	void Set(int row, int col, Pixel value){
 		if (row < 0 || row >= height || col < 0 || col >= width) {
-			int i = 0; i = 1 / i; // OUT OF BOUNDS CRASH
+			//int i = 0; i = 1 / i; // OUT OF BOUNDS CRASH
+			return;
 		}
 		data[row * width + col] = value;
+	}
+	// will print the given Map2D inside of this one, at the given locaiton
+	void Set(int row, int col, Map2D & other) {
+		for (int y = 0; y < other.height; ++y){
+			for (int x = 0; x < other.width; ++x) {
+				Set(row + y, col + x, other.Get(y, x));
+			}
+		}
 	}
 	// allows access of the map using double square brackets, but without any bounds checking
 	Pixel * operator[](int index){ return &data[index * width]; }

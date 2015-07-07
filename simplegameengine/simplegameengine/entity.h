@@ -18,9 +18,18 @@ public:
 			//platform_move(position.y, position.x); icon->Print();
 		}
 	}
-	void Update(int ms){
+	virtual void Update(int ms){
 		if (iconAnimates) {
 			((AnimatingIcon*)icon)->Update(ms);
+		}
+	}
+
+	void moveByKeyPress(int userInput) {
+		switch (userInput){
+		case 'w':	case PLATFORM_KEY_UP: position.y--;	break;
+		case 'a':	case PLATFORM_KEY_LEFT: position.x--;	break;
+		case 's':	case PLATFORM_KEY_DOWN: position.y++;	break;
+		case 'd':	case PLATFORM_KEY_RIGHT: position.x++;	break;
 		}
 	}
 };

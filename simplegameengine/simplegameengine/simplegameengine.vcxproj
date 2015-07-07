@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="animatingicon.h" />
     <ClInclude Include="array_.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="gameplay.h" />
     <ClInclude Include="icon.h" />

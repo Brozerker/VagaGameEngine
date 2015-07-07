@@ -17,6 +17,8 @@
 
 #include "map2d.h"
 int main() {
+	printf("%d", sizeof(Enemy));
+	platform_getch();
 	srand((unsigned int)time(NULL));
 	Gameplay g(10);
 	clock_t now, previous = clock(), deltaTime, soon;
