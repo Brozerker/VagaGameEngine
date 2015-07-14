@@ -18,6 +18,7 @@ class Gameplay {
 	bool cheatMode;
 	AnimatingIcon animation;
 	Map2D map;
+	Entity * win;
 public:
 	Gameplay(int playerCount) :
 		world(Vec2i(), Vec2i(20, 15)),
@@ -41,16 +42,61 @@ public:
 			"####################";
 		map.SetData(maze, 15, 20);
 		// the static keyword means that playerIconFrames continue to exist without the function that contains it
-		static AnimatingIcon::Frame playerIconFrames[] = {
+		static AnimatingIcon::Frame entityIcon[] = {
 			AnimatingIcon::Frame(Pixel(2, 8, 0), 150),
 			AnimatingIcon::Frame(Pixel(2, 7, 0), 50),
 			AnimatingIcon::Frame(Pixel(2, 15, 0), 100),
 			AnimatingIcon::Frame(Pixel(2, 7, 0), 50),
 		};
-		const int playerIconFrames_count = sizeof(playerIconFrames) / sizeof(playerIconFrames[0]);
-		players.Add(new Entity(new AnimatingIcon(playerIconFrames, playerIconFrames_count), Vec2i(3, 0))); // player
+		static AnimatingIcon::Frame playerIcon[] = {
+			AnimatingIcon::Frame(Pixel(2, FOREGROUND_INTENSITY, 0), 150),
+			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN, 0), 150),
+			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN|FOREGROUND_INTENSITY, 0), 200),
+			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN, 0), 150),
+		};
+		const int entityIcon_count = sizeof(entityIcon) / sizeof(entityIcon[0]);
+		Entity * player = new Entity(new AnimatingIcon(playerIcon, entityIcon_count), Vec2i(2, 13), "player");
+		player->SetWhenColliding([&](Entity* self, Entity * e)->void {
+			if (e->IsType("enemy")) {
+				if (!self->GetInvincible()){
+					gameRunning = false;
+					printf("You Lose!\nPress SPACE to continue\n"); while (platform_getch() != ' ');
+				}
+			} else if (e->IsType("win")){
+				gameRunning = false;
+				printf("You WIN!\nPress SPACE to continue\n"); while (platform_getch() != ' ');
+			} else if (e->IsType("power")) {
+				static AnimatingIcon::Frame powerIcon[] = {
+					AnimatingIcon::Frame(Pixel(2, FOREGROUND_BLUE, 0), 150),
+					AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN|FOREGROUND_BLUE, 0), 150),
+					AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN|FOREGROUND_BLUE | FOREGROUND_INTENSITY, 0), 200),
+					AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN|FOREGROUND_BLUE, 0), 150),
+				};
+				delete players[0]->icon;
+				self->icon = new AnimatingIcon(powerIcon, 4);
+				self->SetInvincible(true);
+				tq.Add(2000, [=]()->void { 
+					// '=' passes closure variables by value, because 'self' is a temporary stack variable. 
+					// a copy of the value will not be modified.
+					delete self->icon;
+					self->icon = new AnimatingIcon(playerIcon, 4);
+					self->SetInvincible(false);
+				});
+			}
+		});
+		players.Add(player);
+		std::function<void(Entity*,Entity*)> whatToDoWhenEnemyTouchesPlayer = [&](Entity *self, Entity * e)->void {
+			if (e->IsType("player")) {
+				if (!e->GetInvincible()){
+					gameRunning = false;
+					printf("You Lose!!!!!\nPress SPACE to continue\n"); while (platform_getch() != ' ');
+				}
+			}
+		};
 		for (int i = 0; i < playerCount; ++i) {
-			players.Add(new Enemy(new AnimatingIcon(playerIconFrames, playerIconFrames_count), Vec2i(4+i, i), 200)); // enemies
+			Entity * e = new Enemy(new AnimatingIcon(entityIcon, entityIcon_count), Vec2i(4 + i, i), 1000, "enemy");
+			e->SetWhenColliding(whatToDoWhenEnemyTouchesPlayer);
+			players.Add(e);
 		}
 		static AnimatingIcon::Frame frames[] = {
 			AnimatingIcon::Frame(Pixel('|'), 100),
@@ -59,44 +105,61 @@ public:
 			AnimatingIcon::Frame(Pixel('\\'), 100),
 		};
 		animation.SetFrames(frames, sizeof(frames) / sizeof(frames[0]));
+		//tq.Add(1000, []()->void {
+		//	printf("He look at me!");
+		//	platform_getch();
+		//});
+		win = new Entity(new AnimatingIcon(animation), Vec2i(12, 2), "win");
+		win->SetBlocking(false);
+		players.Add(win);
+		Entity * power = new Entity(new AnimatingIcon(animation), Vec2i(15, 13), "power");
+		power->SetBlocking(false);
+		players.Add(power);
 	}
 	bool IsGameRunning() { return gameRunning; }
 	void Draw(Map2D * graphicsContext) {
-		//world.Draw(graphicsContext, Pixel(' '));
 		graphicsContext->Set(0, 0, map);
 		for (int i = 0; i < players.Count(); ++i) {
-			//if (world.Contains(players[i].position)) {
-			//if (graphicsContext->GetRect().Contains(players[i].position)) {
-				players[i]->Draw(graphicsContext);
-			//}
+			players[i]->Draw(graphicsContext);
 		}
 		animation.Print();
 	}
 	void UserInput(long inputFromSystem) { userInput = inputFromSystem; }
-	void Update(clock_t deltaTimeMS) {
-		tq.Update(deltaTimeMS);
-		animation.Update(deltaTimeMS);
-		for (int i = 0; i < players.Count(); ++i) {
 
-	// asking for forgiveness
+	Entity * GetOtherEntityInSpot(Vec2i spot, Entity * ignore) {
+		for (int i = 0; i < players.Count(); ++i) {
+			if (players[i] != ignore && players[i]->position == spot) {
+				return players[i];
+			}
+		}
+		return nullptr;
+	}
+
+	void Update(clock_t deltaTimeMS) {
+		tq.Update(deltaTimeMS); // service the update queue
+		animation.Update(deltaTimeMS);
+
+		players[0]->SetUserInput(userInput);
+
+		// update AND collision detection
+		for (int i = 0; i < players.Count(); ++i) {
 			// keeps track of where the player was, as a responsible peices of data that can fix a position problem later
 			Vec2i oldPosition = players[i]->position;
-
 			players[i]->Update(deltaTimeMS);
-
 			Vec2i p = players[i]->position;
-
+			Entity * colliding = GetOtherEntityInSpot(p, players[i]);
 			// if the player's new position is wrong (out of range, or inside of a wall)
-			if(p.x < 0                     || p.y < 0 
-			|| p.x >= map.GetRect().size.x || p.y >= map.GetRect().size.y 
-			|| map.Get(p.y, p.x).c == '#') {
+			if (p.x < 0 || p.y < 0
+				|| p.x >= map.GetRect().size.x || p.y >= map.GetRect().size.y
+				|| map.Get(p.y, p.x).c == '#' || (colliding != nullptr && colliding->IsBlocking()) ) {
 				// go back to the old position
 				players[i]->position = oldPosition;
 			}
-
+			// do collision code even if the object colliding is not blocking
+			if (colliding != nullptr) {
+				players[i]->CollideWith(colliding);
+			}
 		}
-		Entity * currentP = players[0];
-		currentP->moveByKeyPress(userInput);
 		if (userInput == '\r' || userInput == '\n') {
 			int testSequence[] = { PLATFORM_KEY_UP, PLATFORM_KEY_DOWN, PLATFORM_KEY_LEFT, PLATFORM_KEY_RIGHT, ' ' };
 			if (keypresses.IsEqual(testSequence, sizeof(testSequence) / sizeof(testSequence[0]))) {
@@ -107,11 +170,6 @@ public:
 		}
 		else if(userInput != -1) {
 			keypresses.Add(userInput);
-			//printf("\n");
-			//for (int i = 0; i < keypresses.Count(); ++i) {
-			//	printf("[%c] (%d)\n", keypresses[i], keypresses[i]);
-			//}
-			//printf("-----------");
 		}
 		userInput = -1;
 	}

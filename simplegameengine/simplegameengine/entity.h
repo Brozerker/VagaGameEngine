@@ -2,14 +2,45 @@
 #include "vec2i.h"
 #include "printable.h"
 #include "animatingicon.h"
+#include <functional>
 
 class Entity {
+	bool isBlocking;
 	bool iconAnimates;
+	bool invincible;
+	std::function<void(Entity*,Entity*)> whenColliding;
+protected:
+	int userInput;
+	const char * type;
 public:
+	void SetUserInput(int input){ userInput = input; }
+	int GetUserInput() { return userInput; }
+
+	void SetBlocking(bool c) { isBlocking = c; }
+	bool IsBlocking() { return isBlocking; }
+
+	void SetInvincible(bool i) { invincible = i; }
+	bool GetInvincible() { return invincible; }
+
+	const char * GetType() { return type; }
+
+	bool IsType(const char * type) { return strcmp(this->type, type) == 0; }
+
+	// the first entity is self, the second is the colliding entity
+	void SetWhenColliding(std::function<void(Entity*,Entity*)> whenColliding) {
+		this->whenColliding = whenColliding;
+	}
+	void CollideWith(Entity * e){
+		if (whenColliding != nullptr){
+			whenColliding(this, e);
+		}
+	}
+
 	Printable * icon;
 	Vec2i position;
-	Entity() : icon(nullptr), iconAnimates(false) {}
-	Entity(Printable * icon, Vec2i position) : icon(icon), position(position) {
+	Entity() : icon(nullptr), iconAnimates(false), isBlocking(true) {}
+	Entity(Printable * icon, Vec2i position, const char * type)
+		: icon(icon), position(position), type(type), isBlocking(true), invincible(false), whenColliding(nullptr) {
 		iconAnimates = dynamic_cast<AnimatingIcon*>(icon) != nullptr;
 	}
 	void Draw(Map2D * graphicsContext) {
@@ -22,6 +53,7 @@ public:
 		if (iconAnimates) {
 			((AnimatingIcon*)icon)->Update(ms);
 		}
+		moveByKeyPress(userInput);
 	}
 
 	void moveByKeyPress(int userInput) {
