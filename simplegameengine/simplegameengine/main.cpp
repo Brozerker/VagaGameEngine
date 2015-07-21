@@ -15,6 +15,12 @@
 #include <ctime>
 #include "platform_random.h"
 
+// to make data driven:
+// map
+// animations
+// entities
+//   results of entity collision
+
 #include "map2d.h"
 int main() {
 	srand((unsigned int)time(NULL));

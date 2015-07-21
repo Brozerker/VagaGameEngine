@@ -1,0 +1,7 @@
+// frame count
+4
+// character icon, foreground color, background color, ms delay
+2 8 0 150
+2 2 0 150
+2 10 0 200
+2 2 0 150

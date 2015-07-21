@@ -69,4 +69,21 @@
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="level1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="playerSkin.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="powerSkin.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="enemySkin.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="spinnyPipe.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

@@ -98,6 +98,13 @@
     <ClInclude Include="vec2i.h" />
     <ClInclude Include="vector_.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="enemySkin.txt" />
+    <Text Include="level1.txt" />
+    <Text Include="playerSkin.txt" />
+    <Text Include="powerSkin.txt" />
+    <Text Include="spinnyPipe.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

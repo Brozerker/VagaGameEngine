@@ -24,38 +24,9 @@ public:
 		world(Vec2i(), Vec2i(20, 15)),
 		gameRunning(true), userInput(-1), cheatMode(false)
 	{
-		const char * maze =
-			"####################"
-			"#         #        #"
-			"#         #    #   #"
-			"#         #    ## ##"
-			"#         ######   #"
-			"#                  #"
-			"#   #              #"
-			"#    #             #"
-			"#     #            #"
-			"#      #           #"
-			"#       ############"
-			"#                  #"
-			"#                  #"
-			"#                  #"
-			"####################";
-		map.SetData(maze, 15, 20);
-		// the static keyword means that playerIconFrames continue to exist without the function that contains it
-		static AnimatingIcon::Frame entityIcon[] = {
-			AnimatingIcon::Frame(Pixel(2, 8, 0), 150),
-			AnimatingIcon::Frame(Pixel(2, 7, 0), 50),
-			AnimatingIcon::Frame(Pixel(2, 15, 0), 100),
-			AnimatingIcon::Frame(Pixel(2, 7, 0), 50),
-		};
-		static AnimatingIcon::Frame playerIcon[] = {
-			AnimatingIcon::Frame(Pixel(2, FOREGROUND_INTENSITY, 0), 150),
-			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN, 0), 150),
-			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN|FOREGROUND_INTENSITY, 0), 200),
-			AnimatingIcon::Frame(Pixel(2, FOREGROUND_GREEN, 0), 150),
-		};
-		const int entityIcon_count = sizeof(entityIcon) / sizeof(entityIcon[0]);
-		Entity * player = new Entity(new AnimatingIcon(playerIcon, entityIcon_count), Vec2i(2, 13), "player");
+		map.LoadFile("level1.txt");
+		AnimatingIcon * playerSkin = new AnimatingIcon("playerSkin.txt");
+		Entity * player = new Entity(playerSkin, Vec2i(2, 13), "player");
 		player->SetWhenColliding([&](Entity* self, Entity * e)->void {
 			if (e->IsType("enemy")) {
 				if (!self->GetInvincible()){
@@ -79,7 +50,8 @@ public:
 					// '=' passes closure variables by value, because 'self' is a temporary stack variable. 
 					// a copy of the value will not be modified.
 					delete self->icon;
-					self->icon = new AnimatingIcon(playerIcon, 4);
+					AnimatingIcon * playerSkin = new AnimatingIcon("playerSkin.txt");
+					self->icon = playerSkin;
 					self->SetInvincible(false);
 				});
 			}
@@ -93,8 +65,9 @@ public:
 				}
 			}
 		};
+		AnimatingIcon * enemySkin = new AnimatingIcon("enemySkin.txt");
 		for (int i = 0; i < playerCount; ++i) {
-			Entity * e = new Enemy(new AnimatingIcon(entityIcon, entityIcon_count), Vec2i(4 + i, i), 1000, "enemy");
+			Entity * e = new Enemy(enemySkin->Clone(), Vec2i(4 + i, i), 1000, "enemy");
 			e->SetWhenColliding(whatToDoWhenEnemyTouchesPlayer);
 			players.Add(e);
 		}

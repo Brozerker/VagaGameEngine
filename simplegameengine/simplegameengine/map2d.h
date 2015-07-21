@@ -3,6 +3,7 @@
 #include "platform_conio.h"
 #include "rect.h"
 #include "pixel.h"
+#include <fstream>
 
 class Map2D {
 protected:
@@ -66,6 +67,29 @@ public:
 				}
 			}
 		}
+	}
+	void LoadFile(const char * filename) {
+		std::ifstream fin;
+		fin.open(filename);
+		fin >> width;
+		fin >> height;
+		SetSize(width, height);
+		char c;
+		do{
+			c = fin.get();
+		} while (c != '\n' && fin.good());
+		for (int row = 0; row < height; ++row){
+			for (int col = 0; col < width; ++col){
+				c = fin.get();
+				if (c == '\n' || c == '\r') {
+					--col;
+				}
+				else {
+					Set(row, col, c);
+				}
+			}
+		}
+		fin.close();
 	}
 };
 
