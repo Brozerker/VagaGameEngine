@@ -13,7 +13,11 @@ public:
 	Enemy(Printable * icon, Vec2i position, int moveDelay, const char * type) 
 		: Entity(icon, position, type), intervalBetweenMoves(moveDelay), timer(0)
 	{}
-
+	Entity * Init(Printable * icon, Vec2i position, int timing, const char * type) {
+		Entity::Init(icon, position, type);
+		timer = timing;
+		return this;
+	}
 
 	void Update(int msPassed){
 		timer += msPassed;

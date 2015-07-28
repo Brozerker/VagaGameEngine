@@ -89,11 +89,13 @@
     <ClInclude Include="gameplay.h" />
     <ClInclude Include="icon.h" />
     <ClInclude Include="map2d.h" />
+    <ClInclude Include="memorypool.h" />
     <ClInclude Include="pixel.h" />
     <ClInclude Include="platform_conio.h" />
     <ClInclude Include="platform_random.h" />
     <ClInclude Include="printable.h" />
     <ClInclude Include="rect.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="timerqueue.h" />
     <ClInclude Include="vec2i.h" />
     <ClInclude Include="vector_.h" />

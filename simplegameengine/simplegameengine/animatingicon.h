@@ -66,7 +66,6 @@ public:
 	}
 	void LoadFile(const char * filename) {
 		std::ifstream fin;
-		std::cout << "doing stuff..." << std::endl;
 		fin.open(filename);
 		count = NextInt(fin);
 		frames = new Frame[count];
